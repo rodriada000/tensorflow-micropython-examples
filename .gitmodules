@@ -3,12 +3,12 @@
 	url = https://github.com/micropython/micropython.git
 [submodule "tensorflow"]
 	path = tensorflow
-	url = https://github.com/mocleiri/tflite-micro.git
-#	branch = main
+	url = https://github.com/tensorflow/tflite-micro.git
+	branch = main
 [submodule "micropython-ulab"]
 	path = micropython-ulab
 	url = https://github.com/v923z/micropython-ulab.git
-#	branch = master
+	branch = master
 [submodule "tflm_esp_kernels"]
 	path = tflm_esp_kernels
 	url = https://github.com/espressif/tflite-micro-esp-examples.git
