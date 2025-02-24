@@ -71,11 +71,15 @@ jobs:
 
       - name: Build micropython cross compiler
         run:  |
-          source ./micropython/tools/ci.sh && ci_rp2_build
-#         cd ./micropython
-#         make -C ports/rp2 submodules
-#         echo "make -C mpy-cross V=1 clean all"
-#         make -C mpy-cross V=1 clean all
+          cd ./micropython
+          echo "make -C mpy-cross V=1 clean all"
+          make -C mpy-cross 
+          # source ./micropython/tools/ci.sh && ci_rp2_build
+          make -C ports/rp2 submodules
+          make -C ports/rp2
+          make -C ports/rp2 clean
+          make -C ports/rp2 USER_C_MODULES=../../examples/usercmodule/micropython.cmake
+
       - name: Build RP2
         run: |
 
