@@ -38,8 +38,11 @@ jobs:
           git submodule init
           git submodule update --recursive
           cd micropython
-          git submodule update --init lib/pico-sdk lib/tinyusb
-          cd ..
+          git submodule update --init lib/tinyusb
+          git submodule update --init lib/pico-sdk
+          cd lib/pico-sdk
+          git submodule update --init lib/tinyusb
+          cd ../..
       - name: Get Cache Keys
         run: |
           TFLM_COMMIT=$(git submodule status tensorflow | awk '{print ($1)}')
@@ -57,7 +60,6 @@ jobs:
 #          path: ./micropython-modules/microlite/tflm
 #          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ env.tflm-commit }}
       - name: Setup Build for Tensorflow
-#        if: steps.cache-tflm.outputs.cache-hit != 'true'
         run: |
 
           echo "Regenerating microlite/tfm directory"
@@ -69,10 +71,11 @@ jobs:
 
       - name: Build micropython cross compiler
         run:  |
-          cd ./micropython
-          make -C ports/rp2 submodules
-          echo "make -C mpy-cross V=1 clean all"
-          make -C mpy-cross V=1 clean all
+          source ./micropython/tools/ci.sh && ci_rp2_build
+#         cd ./micropython
+#         make -C ports/rp2 submodules
+#         echo "make -C mpy-cross V=1 clean all"
+#         make -C mpy-cross V=1 clean all
       - name: Build RP2
         run: |
 
@@ -81,7 +84,7 @@ jobs:
           cd ../micropython
 
           # PICO
-          cmake -S ports/rp2 -B build-PICO -DPICO_BUILD_DOCS=0 -DMICROPY_BOARD=PICO \
+          cmake -S ports/rp2 -B build-PICO -DPICO_BUILD_DOCS=0 -DMICROPY_BOARD=RPI_PICO_W \
                     -DUSER_C_MODULES=/home/runner/work/tensorflow-micropython-examples/tensorflow-micropython-examples/micropython-modules/micropython.cmake
 
           cd build-PICO
